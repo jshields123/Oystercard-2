@@ -42,7 +42,30 @@ describe OysterCard do
         subject.touch_in
         expect(subject.active).to eq true
       end
-      
+
+
     end
+    describe ' touch in' do
+
+      it 'changes active to false' do
+        subject.touch_in
+        subject.touch_out
+        expect(subject.active).to eq false
+    end
+  end
+
+  describe 'states if in journey or not' do
+
+    it "it is in journey after touch in" do
+      subject.touch_in
+      expect(subject).to be_in_journey
+    end
+
+    it "it is not in journey after touch out" do
+      subject.touch_in
+      subject.touch_out
+      expect(subject).not_to be_in_journey
+    end
+  end
 
 end
