@@ -39,6 +39,7 @@ describe OysterCard do
       it { is_expected.to respond_to(:touch_in) }
 
       it "changes active to true" do
+        subject.top_up(5)
         subject.touch_in
         expect(subject.active).to eq true
       end
@@ -48,20 +49,28 @@ describe OysterCard do
     describe ' touch in' do
 
       it 'changes active to false' do
+        subject.top_up(5)
         subject.touch_in
         subject.touch_out
         expect(subject.active).to eq false
     end
+
+      it "does not touch in unless balance has minimum fare" do
+        expect{ subject.touch_in }.to raise_error "Not enough money on card"
+      end
+
   end
 
   describe 'states if in journey or not' do
 
     it "it is in journey after touch in" do
+      subject.top_up(5)
       subject.touch_in
       expect(subject).to be_in_journey
     end
 
     it "it is not in journey after touch out" do
+      subject.top_up(5)
       subject.touch_in
       subject.touch_out
       expect(subject).not_to be_in_journey
