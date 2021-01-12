@@ -44,9 +44,13 @@ describe OysterCard do
         expect(subject.active).to eq true
       end
 
+      it "does not touch in unless balance has minimum fare" do
+        expect{ subject.touch_in }.to raise_error "Not enough money on card"
+      end
 
     end
-    describe ' touch in' do
+
+    describe ' touch out' do
 
       it 'changes active to false' do
         subject.top_up(5)
@@ -55,9 +59,11 @@ describe OysterCard do
         expect(subject.active).to eq false
     end
 
-      it "does not touch in unless balance has minimum fare" do
-        expect{ subject.touch_in }.to raise_error "Not enough money on card"
-      end
+    it 'it deduct the minimum fare after touch out' do
+      subject.top_up(5)
+      subject.touch_in
+      expect { subject.touch_out }.to change{ subject.balance }.by(-1)
+    end
 
   end
 
