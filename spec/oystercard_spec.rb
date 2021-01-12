@@ -14,12 +14,9 @@ describe OysterCard do
 
     describe '#top_up' do
 
-        it { is_expected.to respond_to(:top_up).with(1).argument }
-
         it 'increases the balance with the amount passed as an argument' do
-            card = OysterCard.new
-            card.top_up(15)
-            expect(card.balance).to eq 15
+            subject.top_up(15)
+            expect(subject.balance).to eq 15
         end
 
         it "raises an exception when the new balance exceeds the limit" do
@@ -31,15 +28,21 @@ describe OysterCard do
 
     describe 'deduct' do
 
-      it { is_expected.to respond_to(:deduct).with(1).argument }
-
       it 'deducts amount from the balance of the card' do
-        card = OysterCard.new
-        card.top_up(15)
-        card.deduct(5)
-        expect(card.balance).to eq 10
+        subject.top_up(15)
+        expect{ subject.deduct(5) }.to change{ subject.balance}.by -5
       end
+    end
 
-end
+    describe 'touch in' do
+
+      it { is_expected.to respond_to(:touch_in) }
+
+      it "changes active to true" do
+        subject.touch_in
+        expect(subject.active).to eq true
+      end
+      
+    end
 
 end
