@@ -10,6 +10,10 @@ describe OysterCard do
             expect(subject.balance).to be_an(Numeric)
         end
 
+        it 'has an empty list of journeys' do
+          expect(subject.journey_list).to eq []
+        end
+
     end
 
     describe '#top_up' do
@@ -57,21 +61,22 @@ describe OysterCard do
         subject.top_up(5)
         subject.touch_in("entrystation")
       end
+      let(:exit_station) { double("Baker Street") }
       it 'changes in journey to false' do
         # subject.top_up(5)
         # subject.touch_in
-        subject.touch_out
+        subject.touch_out(exit_station)
         expect(subject.in_journey?).to eq false
     end
 
     it 'it deduct the minimum fare after touch out' do
       # subject.top_up(5)
       # subject.touch_in
-      expect { subject.touch_out }.to change{ subject.balance }.by(-1)
+      expect { subject.touch_out(exit_station) }.to change{ subject.balance }.by(-1)
     end
 
     it 'it forgets entrystation' do
-      expect { subject.touch_out }.to change{ subject.entry_station }.to(nil)
+      expect { subject.touch_out(exit_station) }.to change{ subject.entry_station }.to(nil)
     end
 
   end
@@ -90,7 +95,8 @@ describe OysterCard do
     it "it is not in journey after touch out" do
       # subject.top_up(5)
       # subject.touch_in
-      subject.touch_out
+      exit_station = double("Baker Street")
+      subject.touch_out(exit_station)
       expect(subject).not_to be_in_journey
     end
   end
@@ -103,5 +109,17 @@ describe OysterCard do
       expect(subject.entry_station).to eq station
   end
 end
+
+  describe '#journey' do
+    let(:entry_station) { double("Willesden Green") }
+    let(:exit_station) { double("Baker Street") }
+    let(:journey) { {entry_station: entry_station, exit_station: exit_station} }
+    it 'stores the most recent journey' do
+      subject.top_up(5)
+      subject.touch_in(entry_station)
+      subject.touch_out(exit_station)
+      expect(subject.journey).to eq journey
+    end
+  end
 
 end
