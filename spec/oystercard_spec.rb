@@ -10,10 +10,6 @@ describe OysterCard do
             expect(subject.balance).to be_an(Numeric)
         end
 
-        it 'has an empty list of journeys' do
-          expect(subject.journey_list).to eq []
-        end
-
     end
 
     describe '#top_up' do
@@ -38,22 +34,10 @@ describe OysterCard do
       end
     end
 
-    describe '#touch in' do
-
-      # it { is_expected.to respond_to(:touch_in).with(1).argument }
-
-      it "changes in journey to true" do
-        subject.top_up(5)
-        subject.touch_in("entrystation")
-        expect(subject.in_journey?).to eq true
-      end
-
+    describe "#touch in" do
       it "does not touch in unless balance has minimum fare" do
         expect{ subject.touch_in("entrystation") }.to raise_error "Not enough money on card"
       end
-
-
-
     end
 
     describe '#touch out' do
@@ -62,13 +46,7 @@ describe OysterCard do
         subject.touch_in("entrystation")
       end
       let(:exit_station) { double("Baker Street") }
-      it 'changes in journey to false' do
-        # subject.top_up(5)
-        # subject.touch_in
-        subject.touch_out(exit_station)
-        expect(subject.in_journey?).to eq false
-    end
-
+      
     it 'deduct the minimum fare after touch out' do
       # subject.top_up(5)
       # subject.touch_in
