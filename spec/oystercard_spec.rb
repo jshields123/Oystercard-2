@@ -2,7 +2,7 @@ require 'oystercard'
 
 describe OysterCard do
 
-    it { is_expected.to respond_to(:balance) }
+    # it { is_expected.to respond_to(:balance) }
 
     describe 'initialization' do
 
@@ -30,7 +30,7 @@ describe OysterCard do
         end
     end
 
-    describe 'deduct' do
+    describe '#deduct' do
 
       it 'deducts amount from the balance of the card' do
         subject.top_up(15)
@@ -38,9 +38,9 @@ describe OysterCard do
       end
     end
 
-    describe 'touch in' do
+    describe '#touch in' do
 
-      it { is_expected.to respond_to(:touch_in).with(1).argument }
+      # it { is_expected.to respond_to(:touch_in).with(1).argument }
 
       it "changes in journey to true" do
         subject.top_up(5)
@@ -56,7 +56,7 @@ describe OysterCard do
 
     end
 
-    describe ' touch out' do
+    describe '#touch out' do
       before do
         subject.top_up(5)
         subject.touch_in("entrystation")
@@ -69,30 +69,30 @@ describe OysterCard do
         expect(subject.in_journey?).to eq false
     end
 
-    it 'it deduct the minimum fare after touch out' do
+    it 'deduct the minimum fare after touch out' do
       # subject.top_up(5)
       # subject.touch_in
       expect { subject.touch_out(exit_station) }.to change{ subject.balance }.by(-1)
     end
 
-    it 'it forgets entrystation' do
+    it 'forgets entrystation' do
       expect { subject.touch_out(exit_station) }.to change{ subject.entry_station }.to(nil)
     end
 
   end
 
-  describe 'states if in journey or not' do
+  describe '#in journey or not' do
     before do
       subject.top_up(5)
       subject.touch_in("entrystation")
     end
-    it "it is in journey after touch in" do
+    it "is in journey after touch in" do
       # subject.top_up(5)
       # subject.touch_in
       expect(subject).to be_in_journey
     end
 
-    it "it is not in journey after touch out" do
+    it "is not in journey after touch out" do
       # subject.top_up(5)
       # subject.touch_in
       exit_station = double("Baker Street")

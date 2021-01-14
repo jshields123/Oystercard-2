@@ -41,12 +41,12 @@ class OysterCard
     end
 
     def in_journey?
-       @entry_station == nil ? false : true
+      !!@entry_station # == nil ? false : true
 
     end
 
-    def balance_check
-    end
+    # def balance_check
+    # end
 
 
     private
