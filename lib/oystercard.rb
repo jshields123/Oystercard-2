@@ -38,6 +38,7 @@ class OysterCard
       @journey[:entry_station] = @entry_station
       @journey[:exit_station] = exit_station
       @entry_station = nil
+      @journey_list << journey
     end
 
     def in_journey?
