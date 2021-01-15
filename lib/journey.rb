@@ -1,11 +1,11 @@
 require_relative 'oystercard'
 
 class Journey
-  attr_reader :journey_list, :station, :fare
+  attr_reader :journey_list, :station, :fare, :in_journey
 
   PENALTY_FARE = 3
 
-  def initialize(entry_station: nil)
+  def initialize(entry_station: station)
     @journey_list = []
     @in_journey = true
     @station = entry_station

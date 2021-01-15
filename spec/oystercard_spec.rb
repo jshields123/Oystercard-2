@@ -2,36 +2,28 @@ require 'oystercard'
 
 describe OysterCard do
 
-    # it { is_expected.to respond_to(:balance) }
-
     describe 'initialization' do
 
         it 'has a numeric balance' do
             expect(subject.balance).to be_an(Numeric)
         end
 
+        it 'has an empty list of journeys by default' do
+            expect(subject.journey_list).to be_empty
+          end
+
     end
 
     describe '#top_up' do
 
         it 'increases the balance with the amount passed as an argument' do
-            subject.top_up(15)
-            expect(subject.balance).to eq 15
+            expect{ subject.top_up 15 }.to change{ subject.balance }.by 15
         end
 
         it "raises an exception when the new balance exceeds the limit" do
-          card = OysterCard.new
-          card.top_up(described_class::CARD_LIMIT)
-          expect { card.top_up(1) }.to raise_error "Card limit of £#{described_class::CARD_LIMIT} reached"
+          subject.top_up(described_class::CARD_LIMIT)
+          expect { subject.top_up 1 }.to raise_error "Card limit of £#{described_class::CARD_LIMIT} reached"
         end
-    end
-
-    describe '#deduct' do
-
-      it 'deducts amount from the balance of the card' do
-        subject.top_up(15)
-        expect{ subject.deduct(5) }.to change{ subject.balance}.by -5
-      end
     end
 
     describe "#touch in" do
@@ -42,19 +34,24 @@ describe OysterCard do
 
     describe '#touch out' do
       before do
-        subject.top_up(5)
-        subject.touch_in("entrystation")
+        subject.top_up(described_class::CARD_LIMIT)
+        subject.touch_in(entry_station)
       end
       let(:exit_station) { double("Baker Street") }
-
+      let(:entry_station) { double("Bank") }
     it 'deduct the minimum fare after touch out' do
-      # subject.top_up(5)
-      # subject.touch_in
-      expect { subject.touch_out(exit_station) }.to change{ subject.balance }.by(-1)
+      expect { subject.touch_out(exit_station) }.to change{ subject.balance }.by(- described_class::MINIMUM_FARE)
     end
 
-    it 'forgets entrystation' do
-      expect { subject.touch_out(exit_station) }.to change{ subject.entry_station }.to(nil)
+    # it 'forgets entrystation' do
+    #   subject.touch_in(entry_station)
+    #   expect { subject.touch_out(exit_station) }.to change{ subject.entry_station }.to(nil)
+    # end
+
+    it 'stores exit station' do
+      subject.touch_in(entry_station)
+      subject.touch_out(exit_station)
+      expect(subject.exit_station).to eq exit_station
     end
 
   end
@@ -87,6 +84,7 @@ describe OysterCard do
       expect(subject.entry_station).to eq station
   end
 end
+
 
   describe '#journey' do
     let(:entry_station) { double("Willesden Green") }

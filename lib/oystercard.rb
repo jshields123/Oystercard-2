@@ -5,9 +5,8 @@ class OysterCard
    CARD_LIMIT = 90
    MINIMUM_FARE = 1
 
-    attr_reader :balance
     attr_accessor :active
-    attr_reader :entry_station, :journey_list, :journey
+    attr_reader :entry_station, :journey_list, :journey, :balance, :exit_station
 
 
     private
@@ -26,9 +25,6 @@ class OysterCard
       @balance += amount
     end
 
-    def deduct(amount)
-      @balance -= amount
-    end
 
     def touch_in(entrystation)
       fail "Not enough money on card" if @balance < MINIMUM_FARE
@@ -37,22 +33,18 @@ class OysterCard
     end
 
     def touch_out(exit_station)
-      deduct(amount = MINIMUM_FARE)
+      deduct(MINIMUM_FARE)
       @journey = {:entry_station => @entry_station, :exit_station => exit_station}
       @entry_station = nil
+      @exit_station = exit_station
       @journey_list << journey
     end
 
-    # def in_journey?
-    #   !!@entry_station # == nil ? false : true
-    #
-    # end
-
-    # def balance_check
-    # end
-
-
     private
+
+    def deduct(amount)
+      @balance -= amount
+    end
 
     def limit_exceeded?(amount)
       balance + amount > CARD_LIMIT
