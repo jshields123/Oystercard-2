@@ -56,25 +56,6 @@ describe OysterCard do
 
   end
 
-  # describe '#in journey or not' do
-  #   before do
-  #     subject.top_up(5)
-  #     subject.touch_in("entrystation")
-  #   end
-  #   it "is in journey after touch in" do
-  #     # subject.top_up(5)
-  #     # subject.touch_in
-  #     expect(subject).to be_in_journey
-  #   end
-  #
-  #   it "is not in journey after touch out" do
-  #     # subject.top_up(5)
-  #     # subject.touch_in
-  #     exit_station = double("Baker Street")
-  #     subject.touch_out(exit_station)
-  #     expect(subject).not_to be_in_journey
-  #   end
-  # end
 
   describe '#entry station' do
     it 'stores entry station' do
