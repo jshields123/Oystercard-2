@@ -40,7 +40,7 @@ describe OysterCard do
       let(:exit_station) { double("Baker Street") }
       let(:entry_station) { double("Bank") }
     it 'deduct the minimum fare after touch out' do
-      expect { subject.touch_out(exit_station) }.to change{ subject.balance }.by(- described_class::MINIMUM_FARE)
+      expect { subject.touch_out(exit_station) }.to change{ subject.balance }.by(- Journey::MINIMUM_FARE)
     end
 
     # it 'forgets entrystation' do
@@ -51,7 +51,7 @@ describe OysterCard do
     it 'stores exit station' do
       subject.touch_in(entry_station)
       subject.touch_out(exit_station)
-      expect(subject.exit_station).to eq exit_station
+      expect(subject.journey_list[-1].exit_station).to eq exit_station
     end
 
   end
@@ -62,7 +62,7 @@ describe OysterCard do
       station = double("Willesden Green")
       subject.top_up(5)
       subject.touch_in(station)
-      expect(subject.entry_station).to eq station
+      expect(subject.current_journey.entry_station).to eq station
   end
 end
 
@@ -70,12 +70,11 @@ end
   describe '#journey' do
     let(:entry_station) { double("Willesden Green") }
     let(:exit_station) { double("Baker Street") }
-    let(:journey) { {entry_station: entry_station, exit_station: exit_station} }
     it 'stores the most recent journey' do
       subject.top_up(5)
       subject.touch_in(entry_station)
       subject.touch_out(exit_station)
-      expect(subject.journey).to eq journey
+      expect(subject.journey_list[-1]).to be_a Journey
     end
   end
 
